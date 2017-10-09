@@ -1,11 +1,40 @@
-
-;Writes a single number (0-9) to the screen
-;param - adress of a number (*byte)
+;Writes a number to the screen
+;param - address of a number (*qword)
 %macro	writenum	1
 		pushall
-		add		byte [%1], 48
-		write	%1, 1
-		sub		byte [%1], 48
+		mov		rcx, 0
+		mov		rax, [%1]
+		jmp	breaknum
+
+breaknum:
+		mov		rdx, 0
+		mov		rbx, 10
+		div		rbx 
+		push	rdx
+		inc		rcx
+		cmp		rdx, 0
+		jg		breaknum
+		jmp		.checkzero
+
+.checkzero:
+		cmp		rax, 0
+		jg		breaknum
+		cmp		rcx, 1
+		jne		.removeleadingzero
+		jmp		printnum
+
+.removeleadingzero:
+		pop		qword [a]
+		jmp		printnum
+
+printnum:
+		pop		qword [a]
+		add		qword [a], 48
+		write	a, 1
+		sub		qword [a], 48
+		dec		rcx
+		cmp		rcx, 1
+		jg		printnum
 		popall
 %endmacro
 
@@ -44,3 +73,15 @@
 		pop		rcx
 		pop		rbx
 		pop		rax
+%endmacro
+
+;TESTS
+segment	.data
+a	dd	12345
+
+segment	.text
+global	_start
+
+_start:
+	writenum	a
+	quit	0
