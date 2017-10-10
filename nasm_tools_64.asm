@@ -56,7 +56,7 @@
 
 ;Exits the program with a specified code
 ;param - exit status, usually zero if no error (dword)
-%macro	quit	1
+%macro	quit	0-1		0
 		mov 	rax, 1
 		mov		rbx, %1
 		int		0x80
@@ -87,7 +87,8 @@ global	_start
 
 _start:
 	call	testnum
-	quit	0
+	writenum	a
+	quit
 
 ; testnum:
 ; 	call	testnum2

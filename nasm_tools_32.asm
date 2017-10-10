@@ -53,7 +53,7 @@ printnum:
 
 ;Exits the program with a specified code
 ;param - exit status, usually zero if no error (dword)
-%macro	quit	1
+%macro	quit	0-1		0
 		mov 	eax, 1
 		mov		ebx, %1
 		int		0x80

@@ -36,8 +36,8 @@ The following resources have been of great help to me in learning nasm, and I ho
 * [Nasm Homepage](http://www.nasm.us/) - It would be remiss not to mention the main site of the language, a helpful resource for any issues, though may be a bit daunting for newcomers.
 
 ### TODOS
-* Add x64 library
-* Add macro for printing multiple digit numbers
+* ~~Add x64 library~~
+* ~~Add macro for printing multiple digit numbers~~
 * Add support for reading from stdin
 * Add support for reading command-line args
 
