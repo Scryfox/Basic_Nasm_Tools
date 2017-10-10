@@ -1,7 +1,7 @@
 ;Writes a number to the screen
 ;param - address of a number (*dword)
 %macro	writenum	1
-		pushall
+		push	dword [%1]
 		mov		ecx, 0
 		mov		eax, [%1]
 		jmp	breaknum
@@ -35,7 +35,7 @@ printnum:
 		dec		ecx
 		cmp		ecx, 1
 		jg		printnum
-		popall
+		pop		dword [%1]
 %endmacro
 
 ;Writes an specifed number of bytes to the screen

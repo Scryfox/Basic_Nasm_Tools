@@ -1,41 +1,44 @@
 ;Writes a number to the screen
 ;param - address of a number (*qword)
 %macro	writenum	1
-		pushall
-		mov		rcx, 0
+		push	qword [%1]
+		xor		eax, eax
+		xor		ebx, ebx
+		xor		ecx, ecx
+		xor		edx, edx
 		mov		rax, [%1]
-		jmp	breaknum
+		jmp	.breaknum
 
-breaknum:
+.breaknum:
 		mov		rdx, 0
 		mov		rbx, 10
 		div		rbx 
 		push	rdx
 		inc		rcx
 		cmp		rdx, 0
-		jg		breaknum
+		jg		.breaknum
 		jmp		.checkzero
 
 .checkzero:
 		cmp		rax, 0
-		jg		breaknum
+		jg		.breaknum
 		cmp		rcx, 1
 		jne		.removeleadingzero
-		jmp		printnum
+		jmp		.printnum
 
 .removeleadingzero:
-		pop		qword [a]
-		jmp		printnum
+		pop		qword [%1]
+		jmp		.printnum
 
-printnum:
-		pop		qword [a]
-		add		qword [a], 48
+.printnum:
+		pop		qword [%1]
+		add		qword [%1], 48
 		write	a, 1
-		sub		qword [a], 48
+		sub		qword [%1], 48
 		dec		rcx
 		cmp		rcx, 1
-		jg		printnum
-		popall
+		jg		.printnum
+		pop		qword [%1]
 %endmacro
 
 ;Writes an specifed number of bytes to the screen
@@ -77,11 +80,62 @@ printnum:
 
 ;TESTS
 segment	.data
-a	dd	12345
+a	dd	48489596
 
 segment	.text
 global	_start
 
 _start:
-	writenum	a
+	call	testnum
 	quit	0
+
+; testnum:
+; 	call	testnum2
+; 	ret
+
+testnum:
+	writenum	a
+	ret
+
+; testnum:
+; 		pushall
+; 		xor		eax, eax
+; 		xor		ebx, ebx
+; 		xor		ecx, ecx
+; 		xor		edx, edx
+; 		mov		rax, [a]
+; 		sub		rax, 0x2C00000000
+; 		; write	a, 1		;for some reason this allow us to print the correct number
+; 		jmp	.breaknum
+
+; .breaknum:
+; 		mov		rdx, 0
+; 		mov		rbx, 10
+; 		div		rbx 
+; 		push	rdx
+; 		inc		rcx
+; 		cmp		rdx, 0
+; 		jg		.breaknum
+; 		jmp		.checkzero
+
+; .checkzero:
+; 		cmp		rax, 0
+; 		jg		.breaknum
+; 		cmp		rcx, 1
+; 		jne		.removeleadingzero
+; 		jmp		.printnum
+
+; .removeleadingzero:
+; 		pop		qword [a]
+; 		jmp		.printnum
+
+; .printnum:
+; 		pop		qword [a]
+; 		add		qword [a], 48
+; 		write	a, 1
+; 		sub		qword [a], 48
+; 		dec		rcx
+; 		cmp		rcx, 1
+; 		jg		.printnum
+; 		popall
+; 		ret

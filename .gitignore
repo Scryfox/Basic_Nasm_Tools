@@ -1,1 +1,7 @@
 .vscode/settings.json
+nasm_tools_32
+nasm_tools_32.lst
+nasm_tools_32.o
+nasm_tools_64
+nasm_tools_64.lst
+nasm_tools_64.o
