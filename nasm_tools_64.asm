@@ -7,37 +7,37 @@
 		xor		ecx, ecx
 		xor		edx, edx
 		mov		rax, [%1]
-		jmp	.breaknum
+		jmp	%%breaknum
 
-.breaknum:
+%%breaknum:
 		mov		rdx, 0
 		mov		rbx, 10
 		div		rbx 
 		push	rdx
 		inc		rcx
 		cmp		rdx, 0
-		jg		.breaknum
-		jmp		.checkzero
+		jg		%%breaknum
+		jmp		%%checkzero
 
-.checkzero:
+%%checkzero:
 		cmp		rax, 0
-		jg		.breaknum
+		jg		%%breaknum
 		cmp		rcx, 1
-		jne		.removeleadingzero
-		jmp		.printnum
+		jne		%%removeleadingzero
+		jmp		%%printnum
 
-.removeleadingzero:
+%%removeleadingzero:
 		pop		qword [%1]
-		jmp		.printnum
+		jmp		%%printnum
 
-.printnum:
+%%printnum:
 		pop		qword [%1]
 		add		qword [%1], 48
 		write	a, 1
 		sub		qword [%1], 48
 		dec		rcx
 		cmp		rcx, 1
-		jg		.printnum
+		jg		%%printnum
 		pop		qword [%1]
 %endmacro
 
@@ -80,13 +80,16 @@
 
 ;TESTS
 segment	.data
-a	dd	48489596
+a	dd	12345
 
 segment	.text
 global	_start
 
 _start:
 	call	testnum
+	writenum	a
+	writenum	a
+	writenum	a
 	writenum	a
 	quit
 
@@ -95,7 +98,6 @@ _start:
 ; 	ret
 
 testnum:
-	writenum	a
 	ret
 
 ; testnum:
@@ -107,36 +109,36 @@ testnum:
 ; 		mov		rax, [a]
 ; 		sub		rax, 0x2C00000000
 ; 		; write	a, 1		;for some reason this allow us to print the correct number
-; 		jmp	.breaknum
+; 		jmp	%%breaknum
 
-; .breaknum:
+; %%breaknum:
 ; 		mov		rdx, 0
 ; 		mov		rbx, 10
 ; 		div		rbx 
 ; 		push	rdx
 ; 		inc		rcx
 ; 		cmp		rdx, 0
-; 		jg		.breaknum
-; 		jmp		.checkzero
+; 		jg		%%breaknum
+; 		jmp		%%checkzero
 
-; .checkzero:
+; %%checkzero:
 ; 		cmp		rax, 0
-; 		jg		.breaknum
+; 		jg		%%breaknum
 ; 		cmp		rcx, 1
-; 		jne		.removeleadingzero
-; 		jmp		.printnum
+; 		jne		%%removeleadingzero
+; 		jmp		%%printnum
 
-; .removeleadingzero:
+; %%removeleadingzero:
 ; 		pop		qword [a]
-; 		jmp		.printnum
+; 		jmp		%%printnum
 
-; .printnum:
+; %%printnum:
 ; 		pop		qword [a]
 ; 		add		qword [a], 48
 ; 		write	a, 1
 ; 		sub		qword [a], 48
 ; 		dec		rcx
 ; 		cmp		rcx, 1
-; 		jg		.printnum
+; 		jg		%%printnum
 ; 		popall
 ; 		ret

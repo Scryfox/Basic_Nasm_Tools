@@ -4,37 +4,37 @@
 		push	dword [%1]
 		mov		ecx, 0
 		mov		eax, [%1]
-		jmp	breaknum
+		jmp	%%breaknum
 
-breaknum:
+%%breaknum:
 		mov		edx, 0
 		mov		ebx, 10
 		div		ebx 
 		push	edx
 		inc		ecx
 		cmp		edx, 0
-		jg		breaknum
-		jmp		.checkzero
+		jg		%%breaknum
+		jmp		%%checkzero
 
-.checkzero:
+%%checkzero:
 		cmp		eax, 0
-		jg		breaknum
+		jg		%%breaknum
 		cmp		ecx, 1
-		jne		.removeleadingzero
-		jmp		printnum
+		jne		%%removeleadingzero
+		jmp		%%printnum
 
-.removeleadingzero:
+%%removeleadingzero:
 		pop		dword [a]
-		jmp		printnum
+		jmp		%%printnum
 
-printnum:
+%%printnum:
 		pop		dword [a]
 		add		dword [a], 48
 		write	a, 1
 		sub		dword [a], 48
 		dec		ecx
 		cmp		ecx, 1
-		jg		printnum
+		jg		%%printnum
 		pop		dword [%1]
 %endmacro
 
